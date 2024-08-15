@@ -2,16 +2,13 @@ import { Resource, component$, useResource$ } from "@builder.io/qwik";
 import { RevenueChart } from "~/components/ui/dashboard/revenue-chart";
 import { Card } from "~/components/ui/dashboard/cards";
 import { LatestInvoices } from "~/components/ui/dashboard/latest-invoices";
-import { fetchCardData, fetchLatestInvoices } from "~/lib/data";
+import { fetchCardData } from "~/lib/data";
 import { DashboardSkeleton } from "~/components/ui/skeletons";
 
 export default component$(() => {
   const dataResource = useResource$(async () => {
-    const [latestInvoices, cardData] = await Promise.all([
-      fetchLatestInvoices(),
-      fetchCardData(),
-    ]);
-    return { latestInvoices, cardData };
+    const [cardData] = await Promise.all([fetchCardData()]);
+    return { cardData };
   });
 
   return (
@@ -19,7 +16,7 @@ export default component$(() => {
       <h1 class="lusitana mb-4 text-xl md:text-2xl">Dashboard</h1>
       <Resource
         value={dataResource}
-        onResolved={({ latestInvoices, cardData }) => {
+        onResolved={({ cardData }) => {
           const {
             totalPaidInvoices,
             totalPendingInvoices,
@@ -52,7 +49,7 @@ export default component$(() => {
               </div>
               <div class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
                 <RevenueChart />
-                <LatestInvoices latestInvoices={latestInvoices} />
+                <LatestInvoices />
               </div>
             </>
           );
