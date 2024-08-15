@@ -1,37 +1,32 @@
 import { component$ } from "@builder.io/qwik";
-import {
-  useFetchData,
-  useFetchRevenue,
-  useFetchCardData,
-  useFetchLatestInvoices,
-} from "./layout";
-
 import { RevenueChart } from "~/components/ui/dashboard/revenue-chart";
 import { Card } from "~/components/ui/dashboard/cards";
 import { LatestInvoices } from "~/components/ui/dashboard/latest-invoices";
+import { routeLoader$ } from "@builder.io/qwik-city";
+import { fetchRevenue, fetchLatestInvoices, fetchCardData } from "~/lib/data";
+
+export const useFetchData = routeLoader$(async () => {
+  console.log("useFetchData");
+  const [revenue, latestInvoices, cardData] = await Promise.all([
+    fetchRevenue(),
+    fetchLatestInvoices(),
+    fetchCardData(),
+  ]);
+  return {
+    revenue,
+    latestInvoices,
+    cardData,
+  };
+});
 
 export default component$(() => {
-  // const { revenue, latestInvoices } = useFetchData().value;
-  // const {
-  //   numberOfCustomers,
-  //   numberOfInvoices,
-  //   totalPaidInvoices,
-  //   totalPendingInvoices,
-  // } = useFetchData().value.cardData;
-  // const {
-  //   totalPaidInvoices,
-  //   totalPendingInvoices,
-  //   numberOfInvoices,
-  //   numberOfCustomers,
-  // } = cardData;
-  const revenue = useFetchRevenue().value;
-  const latestInvoices = useFetchLatestInvoices().value;
+  const { revenue, latestInvoices, cardData } = useFetchData().value;
   const {
     numberOfCustomers,
     numberOfInvoices,
     totalPaidInvoices,
     totalPendingInvoices,
-  } = useFetchCardData().value;
+  } = cardData;
   return (
     <main>
       <h1 class="lusitana mb-4 text-xl md:text-2xl">Dashboard</h1>
