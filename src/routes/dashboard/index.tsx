@@ -3,6 +3,7 @@ import { RevenueChart } from "~/components/ui/dashboard/revenue-chart";
 import { Card } from "~/components/ui/dashboard/cards";
 import { LatestInvoices } from "~/components/ui/dashboard/latest-invoices";
 import { fetchCardData, fetchLatestInvoices, fetchRevenue } from "~/lib/data";
+import { DashboardSkeleton } from "~/components/ui/skeletons";
 
 export default component$(() => {
   const dataResource = useResource$(async ({ cleanup }) => {
@@ -67,7 +68,7 @@ export default component$(() => {
           return <div>Error: {error.message}</div>;
         }}
         onPending={() => {
-          return <div>Loading...</div>;
+          return <DashboardSkeleton />;
         }}
       />
     </main>
