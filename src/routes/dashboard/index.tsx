@@ -6,8 +6,10 @@ import { fetchCardData } from "~/lib/data";
 import { DashboardSkeleton } from "~/components/ui/skeletons";
 
 export default component$(() => {
-  const dataResource = useResource$(async () => {
-    const [cardData] = await Promise.all([fetchCardData()]);
+  const dataResource = useResource$(async ({ cleanup }) => {
+    const controller = new AbortController();
+    cleanup(() => controller.abort());
+    const cardData = await fetchCardData();
     return { cardData };
   });
 
