@@ -18,6 +18,7 @@ export const Search = component$(({ placeholder }: { placeholder: string }) => {
     console.log(`searching for ${term}`);
 
     const params = new URLSearchParams(searchParams);
+    params.set("page", "1");
     if (term) {
       params.set("query", term)
     } else {
@@ -29,7 +30,7 @@ export const Search = component$(({ placeholder }: { placeholder: string }) => {
     });
   })
 
-  const debouncedHandleSearch = useDebouncer(handleSearch, 600);
+  const debouncedHandleSearch = useDebouncer(handleSearch, 300);
 
   return (
     <div class="relative flex flex-1 flex-shrink-0">
